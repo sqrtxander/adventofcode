@@ -28,7 +28,6 @@ for pos in range(len(data)):
         data[pos][0] = 'jmp' if data[pos][0] == 'nop' else 'nop'  # switch instruction
         ans = solve()
         data[pos][0] = 'jmp' if data[pos][0] == 'nop' else 'nop'  # switch back
-
     else:
         continue
 

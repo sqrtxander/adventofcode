@@ -2,13 +2,14 @@ data = open('inputs/input03.txt').read().strip().split('\n')
 
 
 def count_trees(right, down):
-    x, y = 0, 0
+    width = len(data[0])
+    x = right % width
+    y = down
     tree_count = 0
     while y < len(data):
         if data[y][x] == '#':
             tree_count += 1
-        x += right
-        x %= len(data[y])
+        x = (x + right) % width
         y += down
     return tree_count
 

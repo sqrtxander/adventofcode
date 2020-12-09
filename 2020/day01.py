@@ -10,5 +10,6 @@ for i in data:
         if 2020 - i - j in data:
             print(f'Part 2: {i * (2020 - i - j) * j}')
             break
-    if 2020 - i - j in data:
-        break
+    else:
+        continue
+    break
