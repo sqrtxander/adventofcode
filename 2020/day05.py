@@ -1,4 +1,4 @@
-data = [line for line in open('inputs/input05.txt').read().strip().split('\n')]
+data = [line for line in open('inputs/input05.txt').readlines()]
 
 seat_ids = []
 

@@ -1,4 +1,4 @@
-data = [int(x) for x in open('inputs/input09.txt').read().strip().split('\n')]
+data = [int(x) for x in open('inputs/input09.txt').readlines()]
 
 
 def sum_of_2(pos, num, prev=25):

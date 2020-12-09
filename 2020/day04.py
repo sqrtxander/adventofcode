@@ -1,12 +1,6 @@
 import re
 
-data = [
-    {
-        (es := e.split(":"))[0]: es[1]
-        for e in p.replace("\n", " ").strip().split(" ")
-    }
-    for p in open('inputs/input04.txt').read().strip().split("\n\n")
-]
+data = [{(es := e.split(":"))[0]: es[1]for e in p.replace("\n", " ").strip().split(" ")}for p in open('inputs/input04.txt').read().strip().split("\n\n")]
 
 valid_1, valid_2 = 0, 0
 for passport in data:

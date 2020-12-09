@@ -1,4 +1,4 @@
-data = open('inputs/input03.txt').read().strip().split('\n')
+data = open('inputs/input03.txt').readlines()
 
 
 def count_trees(right, down):

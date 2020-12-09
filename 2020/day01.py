@@ -1,4 +1,4 @@
-data = [int(x) for x in open('inputs/input01.txt').read().strip().split('\n')]
+data = [int(x) for x in open('inputs/input01.txt').readlines()]
 
 for i in data:
     if 2020 - i in data:

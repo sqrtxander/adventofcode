@@ -1,4 +1,4 @@
-data = [[i, int(j)] for i, j in [x.split(' ') for x in open('inputs/input08.txt').read().strip().split('\n')]]
+data = [[i, int(j)] for i, j in [x.split(' ') for x in open('inputs/input08.txt').readlines()]]
 
 
 def solve():
