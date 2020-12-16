@@ -1,4 +1,4 @@
-data = [line for line in open('inputs/input05.txt').readlines()]
+data = [line.strip() for line in open('inputs/input05.txt').readlines()]
 
 seat_ids = []
 
@@ -8,8 +8,5 @@ for seat in data:
     seat_ids.append(row * 8 + col)
 
 print(f'Part 1: {max(seat_ids)}')
-
-unknown_seats = [x for x in range(1033) if x not in seat_ids]
-for seat in unknown_seats:
-    if seat - 1 in seat_ids and seat + 1 in seat_ids:
-        print(f'Part 2: {seat}')
+my_seat = [x for x in range(min(seat_ids), max(seat_ids)) if x not in seat_ids and x+1 in seat_ids and x-1 in seat_ids]
+print(f'Part 2: {my_seat[0]}')
