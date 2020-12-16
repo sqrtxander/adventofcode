@@ -1,5 +1,7 @@
 from copy import deepcopy
+import time
 
+t= time.perf_counter()
 data = [list(x.strip()) for x in open('inputs/input11.txt').readlines()]
 width = len(data[0])
 height = len(data)
@@ -28,17 +30,11 @@ def change_to_2(x, y):
         xx += xd
         yy += yd
         if 0 <= xx < width and 0 <= yy < height and data[yy][xx] == '.':
-            xx += xd
-            yy += yd
-            if not(0 <= xx < width and 0 <= yy < height):
-                continue
             while data[yy][xx] == '.':
                 xx += xd
                 yy += yd
                 if not(0 <= xx < width and 0 <= yy < height):
                     break
-            if not(0 <= xx < width and 0 <= yy < height):
-                continue
         if not(0 <= xx < width and 0 <= yy < height):
             continue
         if data[yy][xx] == '#':
@@ -61,11 +57,7 @@ while True:
         break
     data = deepcopy(next_data)
 
-occ_count = 0
-for x in data:
-    for y in x:
-        if y == '#':
-            occ_count += 1
+occ_count = sum(x.count('#') for x in data)
 
 print(f'Part 1: {occ_count}')
 
@@ -83,10 +75,7 @@ while True:
         break
     data = deepcopy(next_data)
 
-occ_count = 0
-for x in data:
-    for y in x:
-        if y == '#':
-            occ_count += 1
+occ_count = sum(x.count('#') for x in data)
 
 print(f'Part 2: {occ_count}')
+print(time.perf_counter() - t)
