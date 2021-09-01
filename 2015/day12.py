@@ -1,39 +1,31 @@
 import re
 import json
 
+test = [1, {1: "b", "blue": [1, 2]}, ["red", {'b': "red", 'a': 5}]]
+
 
 def sum_nums(inp):
-    nums = [int(x) for x in re.findall(r'-?\d+', inp)]
+    nums = [int(x) for x in re.findall(r'-?\d+', str(inp))]
     return sum(nums)
 
 
-def check_red(inp):
-    for el in inp:
-        if type(el) == dict:
-            if 'red' in el.values() or 'red' in el.keys():
-                yield sum_nums(str(el))
-            else:
-                yield check_red(el)
-        else:
-            yield check_red(el)
+def sum_red(inp):
+    if type(inp) == int:
+        return 0
+    if type(inp) == list:
+        return sum(sum_red(x) for x in inp)
+    if type(inp) == str:
+        return 0
+    if type(inp) == dict:
+        if 'red' in inp.values():
+            return sum_nums(inp)
+        return sum_red(list(inp.values()))
 
 
 with open('inputs/input12.json', 'r') as f:
-    data = json.load(f)
+    data = json.loads(f.read())
 
-
-total_sum = sum_nums(str(data))
+total_sum = sum_nums(data)
+red_sum = sum_red(data)
 print(total_sum)
-
-
-s = 0
-for num in list(check_red(data)):
-    s += num
-    print(num)
-
-print(total_sum - s)
-
-
-# 142353 too high
-# 75454 too low
-# not 129421
+print(total_sum-red_sum)
