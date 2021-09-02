@@ -1,4 +1,5 @@
 import itertools
+import math
 
 
 class Character:
@@ -8,24 +9,19 @@ class Character:
         self.armor = arm
         self.health = self.health_init
 
-    def attack(self, opponent):
+    def damage_per_hit(self, opponent):
         hit = self.damage - opponent.armor
         hit = hit if hit >= 1 else 1
-
-        opponent.health -= hit
+        return hit
 
     def reset(self):
         self.health = self.health_init
 
 
 def p1_wins_fight(p1, p2):
-    while True:
-        p1.attack(p2)
-        if p2.health <= 0:
-            return True
-        p2.attack(p1)
-        if p1.health <= 0:
-            return False
+    p1_hit = p1.damage_per_hit(p2)
+    p2_hit = p2.damage_per_hit(p1)
+    return math.ceil(p2.health/p1_hit) <= math.ceil(p1.health/p2_hit)
 
 
 with open('inputs/input21.txt', 'r') as f:
