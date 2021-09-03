@@ -14,7 +14,7 @@ def double_letter(string):
 
 
 def no_disallowed(string):
-    return not('ab' in string or 'cd' in string or 'pq' in string or 'xy' in string)
+    return not any(s in string for s in ('ab', 'cd', 'pq', 'xy'))
 
 
 def is_nice_string_1(string):
