@@ -1,6 +1,13 @@
-for i in range(6, 26):
-    i = str(i).zfill(2)
-    f = open(f'inputs/input{i}.txt', 'w')
-    f.close()
-    f = open(f'day{i}.py', 'w')
-    f.close()
+import os
+
+for day in range(1, 26):
+    try:
+        os.mkdir('day'+str(day).zfill(2))
+        os.mkdir('day'+str(day).zfill(2)+'/python')
+        open('day'+str(day).zfill(2)+'/input.txt', 'w')
+        open('day'+str(day).zfill(2)+'/python/part1.py', 'w')
+        open('day'+str(day).zfill(2)+'/python/part2.py', 'w')
+    except OSError:
+        print('failed')
+    else:
+        print('success')
