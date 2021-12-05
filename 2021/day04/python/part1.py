@@ -1,50 +1,48 @@
-import re
-
-
 def check_off_num(num, boards):
-    for i, b in enumerate(boards):
-        for ii, r in enumerate(b):
-            for iii, n in enumerate(r):
+    for i, board in enumerate(boards):
+        for ii, row in enumerate(board):
+            for iii, n in enumerate(row):
                 if n == num:
                     boards[i][ii][iii] = 'X'
     return boards
 
 
-def check_bingo(b):
+def is_bingo(board):
     # horizontal
-    for r in b:
+    for r in board:
         if r.count('X') == len(r):
-            return b
+            return board
 
     # vertical
-    for i in range(len(b)):
-        if b[0][i] == b[1][i] == b[2][i] == b[3][i] == b[4][i] == 'X':
-            return b
+    for i in range(len(board)):
+        if board[0][i] == board[1][i] == board[2][i] == board[3][i] == board[4][i] == 'X':
+            return board
 
     return False
 
 
+def score_board(board):
+    return sum(sum(int(num) for num in row if num != 'X') for row in board)
+
+
 if __name__ == '__main__':
     with open('../input.txt', 'r') as f:
-        data = f.read().split('\n\n')
-        nums = data[0].split(',')
-        boards = [x.split('\n') for x in data[1:]]
-        for i, b in enumerate(boards):
-            for ii, r in enumerate(b):
-                boards[i][ii] = list(re.findall(r'(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)', r)[0])
+        nums, *boards = f.read().split('\n\n')
+        nums = nums.split(',')
+        boards = [[[n for n in row.split()] for row in board.split('\n')]for board in boards]
 
-    curr_num = b = None
+    curr_num = board = None
 
     for curr_num in nums:
         check_off_num(curr_num, boards)
 
-        for b in boards:
-            if check_bingo(b):
+        for board in boards:
+            if is_bingo(board):
                 break
         else:
             continue
         break
 
-    board_sum = sum(sum(int(x) for x in y if x != 'X') for y in b)
+    board_sum = score_board(board)
 
     print(board_sum * int(curr_num))
