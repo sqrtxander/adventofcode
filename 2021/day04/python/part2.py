@@ -29,7 +29,7 @@ if __name__ == '__main__':
     with open('../input.txt', 'r') as f:
         nums, *boards = f.read().split('\n\n')
         nums = nums.split(',')
-        boards = [[[n for n in row.split()] for row in board.split('\n')]for board in boards]
+        boards = [[row.split() for row in board.split('\n')]for board in boards]
 
     curr_num = board = None
 
