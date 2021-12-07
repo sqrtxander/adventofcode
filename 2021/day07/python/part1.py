@@ -1,11 +1,11 @@
-def count_fuel(pos):
-    return sum(abs(num - pos) for num in positions)
+def sum_fuel(pos):
+    return sum(abs(num - pos) for num in crabs)
 
 
 if __name__ == '__main__':
     with open('../input.txt', 'r') as f:
-        positions = [int(num) for num in f.read().split(',')]
+        crabs = [int(num) for num in f.read().split(',')]
 
-    fuel_cost = {count_fuel(i) for i in range(min(positions), max(positions) + 1)}
+    fuel_cost = {sum_fuel(i) for i in range(min(crabs), max(crabs) + 1)}
 
     print(min(fuel_cost))
