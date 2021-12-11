@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
         step += 1
 
-        flash_num = sum(sum(num == 0 for num in line) for line in octopi)
+        flash_num = sum(line.count(0) for line in octopi)
         if flash_num == len(octopi) * len(octopi[0]):
             break
 

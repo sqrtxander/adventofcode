@@ -42,6 +42,6 @@ if __name__ == '__main__':
     for _ in range(100):
         octopi = [[num + 1 for num in line] for line in octopi]
         octopi = flash(octopi)
-        flash_num += sum(sum(num == 0 for num in line) for line in octopi)
+        flash_num += sum(line.count(0) for line in octopi)
 
     print(flash_num)
