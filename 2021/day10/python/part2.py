@@ -9,7 +9,7 @@ def score_incomplete(line):
 
 if __name__ == '__main__':
     with open('../input.txt', 'r') as f:
-        subsystem = [line for line in f.read().splitlines()]
+        subsystem = f.read().splitlines()
 
     reverse = {')': '(', ']': '[', '}': '{', '>': '<'}
     forward = {o: c for c, o in zip(reverse.keys(), reverse.values())}
