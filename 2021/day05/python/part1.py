@@ -1,11 +1,15 @@
 from collections import defaultdict
 
-if __name__ == '__main__':
-    with open('../input.txt', 'r') as f:
+
+def parse(file):
+    with open(file, 'r') as f:
         data = [[tuple(map(int, num.split(','))) for num in line.split(' -> ')]
                 for line in f.read().splitlines()]
+    return data
 
-    lines = defaultdict(lambda: 0)
+
+def solve(data):
+    lines = defaultdict(int)
 
     for (x1, y1), (x2, y2) in data:
         if x1 == x2:
@@ -22,4 +26,12 @@ if __name__ == '__main__':
             for x in range(x1, x2 + 1):
                 lines[(x, y1)] += 1
 
-    print(sum(x > 1 for x in lines.values()))
+    return sum(x > 1 for x in lines.values())
+
+
+if __name__ == '__main__':
+
+    EXPECTED = 5
+    test = solve(parse('../test.in'))
+    assert test == EXPECTED, f'Got {test} should be {EXPECTED}'
+    print(solve(parse('../input.in')))

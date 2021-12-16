@@ -1,11 +1,12 @@
-from copy import deepcopy
-
-if __name__ == '__main__':
-    with open('../input.txt', 'r') as f:
+def parse(file):
+    with open(file, 'r') as f:
         data = f.read().splitlines()
+    return data
 
-    o2 = deepcopy(data)
-    co2 = deepcopy(data)
+
+def solve(nums):
+    o2 = nums.copy()
+    co2 = nums.copy()
 
     for i in range(len(o2[0])):
         bits = [num[i] for num in o2]
@@ -28,5 +29,12 @@ if __name__ == '__main__':
     o2 = int(o2[0], 2)
     co2 = int(co2[0], 2)
 
-    print(o2*co2)
+    return o2*co2
 
+
+if __name__ == '__main__':
+
+    EXPECTED = 230
+    test = solve(parse('../test.in'))
+    assert test == EXPECTED, f'Got {test} should be {EXPECTED}'
+    print(solve(parse('../input.in')))

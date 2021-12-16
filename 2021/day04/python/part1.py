@@ -25,24 +25,28 @@ def score_board(board):
     return sum(sum(int(num) for num in row if num != 'X') for row in board)
 
 
-if __name__ == '__main__':
-    with open('../input.txt', 'r') as f:
+def parse(file):
+    with open(file, 'r') as f:
         nums, *boards = f.read().split('\n\n')
         nums = nums.split(',')
         boards = [[row.split() for row in board.split('\n')]for board in boards]
+    return nums, boards
 
-    curr_num = board = None
 
+def solve(nums, boards):
     for curr_num in nums:
         check_off_num(curr_num, boards)
 
         for board in boards:
             if is_bingo(board):
-                break
-        else:
-            continue
-        break
+                board_sum = score_board(board)
+                return board_sum * int(curr_num)
 
-    board_sum = score_board(board)
 
-    print(board_sum * int(curr_num))
+if __name__ == '__main__':
+
+    EXPECTED = 4512
+    test = solve(*parse('../test.in'))
+    assert test == EXPECTED, f'Got {test} should be {EXPECTED}'
+    print(solve(*parse('../input.in')))
+

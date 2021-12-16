@@ -127,4 +127,4 @@ dmypy.json
 .idea/
 
 # input files
-input.txt
+input.in

@@ -1,4 +1,4 @@
-def get_neighbours(x, y):
+def get_neighbours(x, y, octopi):
     for dx, dy in ((0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1), (-1, 0), (-1, 1)):
         if x + dx < 0 or x + dx >= len(octopi[0]):
             continue
@@ -15,7 +15,7 @@ def flash(octopi):
             break
 
         for x, y in greater:
-            for nx, ny in get_neighbours(x, y):
+            for nx, ny in get_neighbours(x, y, octopi):
                 octopi[ny][nx] += 1
             flashed.add((x, y))
 
@@ -33,10 +33,13 @@ def all_greater_9(octopi, flashed):
     return greater
 
 
-if __name__ == '__main__':
-    with open('../input.txt', 'r') as f:
-        octopi = [[int(num) for num in line] for line in f.read().splitlines()]
+def parse(file):
+    with open(file, 'r') as f:
+        data = [[int(num) for num in line] for line in f.read().splitlines()]
+    return data
 
+
+def solve(octopi):
     flash_num = 0
 
     for _ in range(100):
@@ -44,4 +47,12 @@ if __name__ == '__main__':
         octopi = flash(octopi)
         flash_num += sum(line.count(0) for line in octopi)
 
-    print(flash_num)
+    return flash_num
+
+
+if __name__ == '__main__':
+
+    EXPECTED = 1656
+    test = solve(parse('../test.in'))
+    assert test == EXPECTED, f'Got {test} should be {EXPECTED}'
+    print(solve(parse('../input.in')))

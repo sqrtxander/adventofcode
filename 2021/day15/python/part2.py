@@ -34,9 +34,8 @@ def dijkstra(graph, width, height, source, target):
             heapq.heappush(pq, (c + graph[(nx, ny)], nx, ny))
 
 
-if __name__ == '__main__':
-    with open('../input.txt', 'r') as f:
-        # graph = [int(line) for line in f.read().splitlines()]
+def parse(file):
+    with open(file, 'r') as f:
         f = f.read().splitlines()
         height = len(f)
         width = len(f[0])
@@ -47,7 +46,16 @@ if __name__ == '__main__':
                     for x, n in enumerate(line):
                         graph[(x + width * ix, y + width * iy)] = (int(n) + ix + iy - 1) % 9 + 1
 
-    width *= 5
-    height *= 5
+    return height * 5, width * 5, graph
 
-    print(dijkstra(graph, width, height, (0, 0), (width-1, height-1)))
+
+def solve(height, width, graph):
+    return dijkstra(graph, width, height, (0, 0), (width-1, height-1))
+
+
+if __name__ == '__main__':
+
+    EXPECTED = 315
+    test = solve(*parse('../test.in'))
+    assert test == EXPECTED, f'Got {test} should be {EXPECTED}'
+    print(solve(*parse('../input.in')))

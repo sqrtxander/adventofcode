@@ -15,8 +15,8 @@ def print_paper(coords):
         print()
 
 
-if __name__ == '__main__':
-    with open('../input.txt', 'r') as f:
+def parse(file):
+    with open(file, 'r') as f:
         coords, folds = f.read().split('\n\n')
 
         coords = [[int(num) for num in line.split(',')] for line in coords.split('\n')]
@@ -27,7 +27,11 @@ if __name__ == '__main__':
             axis, val = fold.split('=')
             folds[i] = axis, int(val)
 
-    for h, (axis, val) in enumerate(folds):
+    return coords, folds
+
+
+def solve(coords, folds):
+    for (axis, val) in folds:
         if axis == 'x':
             for i, (x, y) in enumerate(coords):
                 if x > val:
@@ -41,3 +45,8 @@ if __name__ == '__main__':
         coords = list(x for x, _ in groupby(coords))
 
     print_paper(coords)
+
+
+if __name__ == '__main__':
+
+    solve(*parse('../input.in'))

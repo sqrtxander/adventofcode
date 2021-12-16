@@ -7,10 +7,13 @@ def score_incomplete(line):
     return score
 
 
-if __name__ == '__main__':
-    with open('../input.txt', 'r') as f:
-        subsystem = f.read().splitlines()
+def parse(file):
+    with open(file, 'r') as f:
+        data = f.read().splitlines()
+    return data
 
+
+def solve(subsystem):
     reverse = {')': '(', ']': '[', '}': '{', '>': '<'}
     forward = {o: c for c, o in zip(reverse.keys(), reverse.values())}
     closing = (')', ']', '}', '>')
@@ -31,4 +34,12 @@ if __name__ == '__main__':
 
     scores = [score_incomplete(line) for line in completing]
     scores.sort()
-    print(scores[len(completing)//2])
+    return scores[len(completing)//2]
+
+
+if __name__ == '__main__':
+
+    EXPECTED = 288957
+    test = solve(parse('../test.in'))
+    assert test == EXPECTED, f'Got {test} should be {EXPECTED}'
+    print(solve(parse('../input.in')))

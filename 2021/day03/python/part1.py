@@ -1,12 +1,15 @@
-if __name__ == '__main__':
-    with open('../input.txt', 'r') as f:
+def parse(file):
+    with open(file, 'r') as f:
         data = f.read().splitlines()
+    return data
 
-    gamma = [''] * len(data[0])
-    epsilon = [''] * len(data[0])
 
-    for i in range(len(data[0])):
-        bits = [num[i] for num in data]
+def solve(nums):
+    gamma = [''] * len(nums[0])
+    epsilon = [''] * len(nums[0])
+
+    for i in range(len(nums[0])):
+        bits = [num[i] for num in nums]
 
         if bits.count('1') >= bits.count('0'):
             gamma[i] = '1'
@@ -18,4 +21,12 @@ if __name__ == '__main__':
     gamma = int(''.join(gamma), 2)
     epsilon = int(''.join(epsilon), 2)
 
-    print(gamma * epsilon)
+    return gamma * epsilon
+
+
+if __name__ == '__main__':
+
+    EXPECTED = 198
+    test = solve(parse('../test.in'))
+    assert test == EXPECTED, f'Got {test} should be {EXPECTED}'
+    print(solve(parse('../input.in')))
