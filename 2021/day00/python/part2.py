@@ -5,7 +5,7 @@ def parse(file):
 
 
 def solve(data):
-    return 0
+    return data
 
 
 if __name__ == '__main__':
