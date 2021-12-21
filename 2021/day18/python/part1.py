@@ -27,7 +27,7 @@ def solve(data):
     total = []
     for snail_num in data:
         total += [snail_num]
-    return total
+    return magnitude(total)
 
 
 
