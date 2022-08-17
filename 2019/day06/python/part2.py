@@ -29,13 +29,9 @@ def solve(file):
                 heapq.heappush(pq, (c + 1, p))
 
     with open(file, 'r') as f:
-        # orbits = {b: a for a, b in (line.split(')') for line in f.read().splitlines())}
-        graph = {}
         neighbours = defaultdict(list)
         for line in f.read().splitlines():
             a, b = line.split(')')
-            graph[a] = 1
-            graph[b] = 1
             neighbours[a].append(b)
             neighbours[b].append(a)
 

@@ -1,32 +1,28 @@
-def parse(file):
-    with open(file, 'r') as f:
-        data = [int(num) for num in f.read().split(',')]
-    return data
-
-
-def solve(data, noun=None, verb=None):
+def run_intcode(program, noun=None, verb=None):
     if noun is not None:
-        data[1] = noun
+        program[1] = noun
     if verb is not None:
-        data[2] = verb
+        program[2] = verb
 
-    for i in range(0, len(data), 4):
-        opcode = data[i]
-        read1 = data[i+1]
-        read2 = data[i+2]
-        store = data[i+3]
+    for i in range(0, len(program), 4):
+        opcode, read1, read2, store = program[i: i+4]
+
         if opcode == 1:
-            data[store] = data[read1] + data[read2]
+            program[store] = program[read1] + program[read2]
         elif opcode == 2:
-            data[store] = data[read1] * data[read2]
+            program[store] = program[read1] * program[read2]
         elif opcode == 99:
             break
-    return data[0]
 
+    return program[0]
+
+
+def solve(file):
+    with open(file, 'r') as f:
+        program = [int(num) for num in f.read().split(',')]
+    return run_intcode(program, 12, 2)
+    
 
 if __name__ == '__main__':
 
-    EXPECTED = 3500
-    test = solve(parse('../test.in'))
-    assert test == EXPECTED, f'Got {test} should be {EXPECTED}'
-    print(solve(parse('../input.in'), 12, 2))
+    print(solve('../input.in'))
