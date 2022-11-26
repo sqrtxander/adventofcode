@@ -1,115 +1,128 @@
-import itertools
-
-
-class Player:
-    def __init__(self, health, mana):
-        self.health_init = health
-        self.health = self.health_init
-        self.mana_init = mana
-        self.mana = self.mana_init
-        self.armor = 0
-        self.timer = []
-        self.mana_used = 0
-        self.spell_costs = {'Magic Missile': 53, 'Drain': 73, 'Shield': 113, 'Poison': 173, 'Recharge': 229}
-
-    def use_spell(self, spell, opp):
-        if self.mana < self.spell_costs[spell]:
-            return
-        if spell in [eff for eff, _ in self.timer]:
-            return
+def solve(file):
+    def player_turn(game, spell):
         if spell == 'Magic Missile':
-            self.mana -= self.spell_costs[spell]
-            self.mana_used += self.spell_costs[spell]
-            opp.health -= 4
+            game['boss_hp'] = game['boss_hp'] - 4
+        
         elif spell == 'Drain':
-            self.mana -= self.spell_costs[spell]
-            self.mana_used += self.spell_costs[spell]
-            opp.health -= 2
-            self.health += 2
+            game['boss_hp'] = game['boss_hp'] - 2
+            game['player_hp'] = game['player_hp'] + 2
+        
         elif spell == 'Shield':
-            self.mana -= self.spell_costs[spell]
-            self.mana_used += self.spell_costs[spell]
-            self.armor += 7
-            self.timer.append(('Shield', 6))
+            game['shield_timer'] = 6
+            game['player_armor'] = game['player_armor'] + 7
+        
         elif spell == 'Poison':
-            self.mana -= self.spell_costs[spell]
-            self.mana_used += self.spell_costs[spell]
-            self.timer.append(('Poison', 6))
+            game['poison_timer'] = 6
+        
         elif spell == 'Recharge':
-            self.mana -= self.spell_costs[spell]
-            self.mana_used += self.spell_costs[spell]
-            self.timer.append(('Recharge', 5))
+            game['recharge_timer'] = 5
+        game['player_mana'] = game['player_mana'] - SPELL_COSTS[spell]
 
-    def manage_effects(self, opp):
+    def boss_turn(game):
+        dmg = max(1, game['boss_dmg'] - game['player_armor'])
+        game['player_hp'] -= dmg
 
-        for effect, time in self.timer:
-            if effect == 'Shield' and time == 0:
-                self.armor -= 7
-            elif effect == 'Poison' and time > 0:
-                opp.health -= 3
-            elif effect == 'Recharge' and time > 0:
-                self.mana += 101
+    def apply_effects(game):
+        if game['shield_timer']:
+            game['shield_timer'] = game['shield_timer'] - 1
+            if game['shield_timer'] == 0:
+                game['player_armor'] = 0
 
-        self.timer = [(eff, tim - 1) for eff, tim in self.timer if tim > 0]
+        if game['poison_timer']:
+            game['boss_hp'] = game['boss_hp'] - 3
+            game['poison_timer'] = game['poison_timer'] - 1
 
-    def reset(self):
-        self.timer = []
-        self.armor = 0
-        self.health = self.health_init
-        self.mana = self.mana_init
-        self.mana_used = 0
+        if game['recharge_timer']:
+            game['player_mana'] = game['player_mana'] + 101
+            game['recharge_timer'] = game['recharge_timer'] - 1
 
+    def is_over_and_min(game, min_mana):
+        if game['player_hp'] <= 0:
+            return True, min_mana
+        if game['boss_hp'] <= 0:
+            return True, min(min_mana, game['mana_spent'])
+        return False, min_mana
 
-class Boss:
-    def __init__(self, health, dam):
-        self.health_init = health
-        self.health = self.health_init
-        self.damage = dam
+    def try_all_games(games, min_mana):
+        new_games = []
+        for game in games:
 
-    def reset(self):
-        self.health = self.health_init
+            apply_effects(game)
+            endgame, min_mana = is_over_and_min(game, min_mana)
+            if endgame:
+                continue
 
-    def attack(self, opp):
-        hit = self.damage - opp.armor
-        hit = hit if hit >= 1 else 1
-        opp.health -= hit
+            min_mana = try_all_spells(game, min_mana, new_games)
+
+        return new_games, min_mana
+
+    def try_all_spells(game, min_mana, new_games):
+        castable_spells = [spell for spell, cost in SPELL_COSTS.items()
+                           if cost <= game['player_mana']]
+        if game['shield_timer'] and 'Shield' in castable_spells:
+            castable_spells.remove('Shield')
+        if game['poison_timer'] and 'Poison' in castable_spells:
+            castable_spells.remove('Poison')
+        if game['recharge_timer'] and 'Recharge' in castable_spells:
+            castable_spells.remove('Recharge')
+
+        for spell in castable_spells:
+
+            sub_game = game.copy()
+            sub_game['spells_cast'] = list(sub_game['spells_cast']) + [spell]
+            sub_game['mana_spent'] = sub_game['mana_spent']+SPELL_COSTS[spell]
+
+            player_turn(sub_game, spell)
+            endgame, min_mana = is_over_and_min(sub_game, min_mana)
+            if endgame:
+                continue
+
+            if sub_game['mana_spent'] > min_mana:
+                continue
+
+            apply_effects(sub_game)
+            endgame, min_mana = is_over_and_min(sub_game, min_mana)
+            if endgame:
+                continue
+
+            boss_turn(sub_game)
+            endgame, min_mana = is_over_and_min(sub_game, min_mana)
+            if endgame:
+                continue
+
+            new_games.append(sub_game)
+        return min_mana
+
+    SPELL_COSTS = {'Magic Missile': 53,
+                   'Drain': 73,
+                   'Shield': 113,
+                   'Poison': 173,
+                   'Recharge': 229}
+
+    with open(file, 'r') as f:
+        boss_hp, boss_dmg = [int(x.split(': ')[-1]) for x in f.readlines()]
+
+        game = {'player_hp': 50,
+                'player_mana': 500,
+                'player_armor': 0,
+
+                'boss_hp': boss_hp,
+                'boss_dmg': boss_dmg,
+
+                'shield_timer': 0,
+                'poison_timer': 0,
+                'recharge_timer': 0,
+
+                'spells_cast': [],
+                'mana_spent': 0}
+
+        games = [game]
+        min_mana = float('inf')
+        while len(games):
+            games, min_mana = try_all_games(games, min_mana)
+        return min_mana
 
 
 if __name__ == '__main__':
-    with open('../input.txt', 'r') as f:
-        boss_hp, boss_dam = [int(x.split(': ')[-1]) for x in f.readlines()]
 
-    print(boss_hp, boss_dam)
-    spells = ('Magic Missile', 'Drain', 'Shield', 'Poison', 'Recharge')
-
-    boss = Boss(boss_hp, boss_dam)
-    player = Player(10, 250)
-
-    min_mana = float('inf')
-    combos = list(itertools.product(spells, repeat=5))
-    for spell_order in combos:
-        player.reset()
-        boss.reset()
-        # spell_order = ('Recharge', 'Shield', 'Drain', 'Poison', 'Magic Missile')
-        for spell in spell_order:
-            player.manage_effects(boss)
-            player.use_spell(spell, boss)
-            if boss.health <= 0:
-                if player.mana_used < min_mana:
-                    min_mana = player.mana_used
-                    path = spell_order
-                break
-
-            player.manage_effects(boss)
-            if boss.health <= 0:
-                if player.mana_used < min_mana:
-                    min_mana = player.mana_used
-                    path = spell_order
-                break
-
-            boss.attack(player)
-            if player.health <= 0:
-                break
-
-    print(min_mana)
-    print(path)
+    print(solve('../input.in'))
