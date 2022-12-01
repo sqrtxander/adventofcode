@@ -7,6 +7,6 @@ def solve(file):
 if __name__ == '__main__':
 
     EXPECTED = 0
-    test = solve('../test.in')
+    test = solve('test.in')
     assert test == EXPECTED, f'Got {test} should be {EXPECTED}'
-    print(solve('../input.in'))
+    print(solve('input.in'))
