@@ -1,4 +1,16 @@
-def solve(file):
+import os
+
+
+INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.in')
+EXPECTED = 15
+TEST_INPUT = '''\
+A Y
+B X
+C Z
+'''
+
+
+def solve(inp):
     def score_outcome(elf, you):
         scores = {'X': 1, 'Y': 2, 'Z': 3}
 
@@ -12,15 +24,18 @@ def solve(file):
         else:
             return scores[you]
 
-    with open(file, 'r') as f:
-        data = [line.split() for line in f.read().splitlines()]
+    strategy_guide = [line.split() for line in inp.strip().splitlines()]
 
-    return sum(score_outcome(elf, you) for elf, you in data)
+    return sum(score_outcome(elf, you) for elf, you in strategy_guide)
+
+
+def main():
+    test = solve(TEST_INPUT)
+    assert test == EXPECTED, f'Got {test} should be {EXPECTED}'
+
+    with open(INPUT_TXT, 'r') as f:
+        print(solve(f.read()))
 
 
 if __name__ == '__main__':
-
-    EXPECTED = 15
-    test = solve('test.in')
-    assert test == EXPECTED, f'Got {test} should be {EXPECTED}'
-    print(solve('input.in'))
+    main()
