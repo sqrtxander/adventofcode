@@ -1,12 +1,25 @@
-def solve(file):
-    with open(file, 'r') as f:
-        data = [line for line in f.read().splitlines()]
+import os
+
+
+INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.in')
+EXPECTED = 0
+TEST_INPUT = '''\
+
+'''
+
+
+def solve(inp):
+    data = [line for line in inp.strip().splitlines()]
     return data
 
 
-if __name__ == '__main__':
-
-    EXPECTED = 0
-    test = solve('test.in')
+def main():
+    test = solve(TEST_INPUT)
     assert test == EXPECTED, f'Got {test} should be {EXPECTED}'
-    print(solve('input.in'))
+
+    with open(INPUT_TXT, 'r') as f:
+        print(solve(f.read()))
+
+
+if __name__ == '__main__':
+    main()
