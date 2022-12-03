@@ -17,11 +17,11 @@ def solve(inp):
     def common_letter(str1, str2):
         return set(str1).intersection(str2).pop()
 
-    data = [line for line in inp.strip().splitlines()]
+    rucksacks = [line for line in inp.strip().splitlines()]
 
     total_priorities = 0
 
-    for line in data:
+    for line in rucksacks:
         first_half = line[:len(line)//2]
         second_half = line[len(line)//2:]
         badge = common_letter(first_half, second_half)
