@@ -1,15 +1,40 @@
-def solve(file):
-    with open(file, 'r') as f:
-        calories = [sum(int(elf_cal) for elf_cal in line.splitlines())
-                    for line in f.read().split('\n\n')]
+import os
 
-    calories.sort()
-    return sum(calories[-3:])
+
+INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.in')
+EXPECTED = 45000
+TEST_INPUT = '''\
+1000
+2000
+3000
+
+4000
+
+5000
+6000
+
+7000
+8000
+9000
+
+10000
+'''
+
+
+def solve(inp):
+    calories = [sum(int(elf_cal) for elf_cal in line.splitlines())
+                for line in inp.strip().split('\n\n')]
+
+    return sum(sorted(calories)[-3:])
+
+
+def main():
+    test = solve(TEST_INPUT)
+    assert test == EXPECTED, f'Got {test} should be {EXPECTED}'
+
+    with open(INPUT_TXT, 'r') as f:
+        print(solve(f.read()))
 
 
 if __name__ == '__main__':
-
-    EXPECTED = 45000
-    test = solve('test.in')
-    assert test == EXPECTED, f'Got {test} should be {EXPECTED}'
-    print(solve('input.in'))
+    main()
