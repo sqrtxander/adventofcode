@@ -14,13 +14,13 @@ TEST_INPUT = '''\
 
 
 def solve(inp):
-    def fully_contained(range1, range2):
-        return range1[0] >= range2[0] and range1[1] <= range2[1] or range2[0] >= range1[0] and range2[1] <= range1[1]
+    def fully_contained(a, b, c, d):
+        return a <= c and b >= d or a >= c and b <= d
 
     data = [[[int(num) for num in part.split('-')]
              for part in line.split(',')] for line in inp.strip().splitlines()]
 
-    return sum(fully_contained((a, b), (c, d)) for (a, b,), (c, d) in data)
+    return sum(fully_contained(a, b, c, d) for (a, b,), (c, d) in data)
 
 
 def main():
