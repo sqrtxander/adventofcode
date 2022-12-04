@@ -17,10 +17,10 @@ def solve(inp):
     def does_overlap(a, b, c, d):
         return a <= d and b >= c
 
-    data = [[[int(num) for num in part.split('-')]
-             for part in line.split(',')] for line in inp.strip().splitlines()]
+    data = [[int(num) for num in line.split('-')]
+            for line in inp.strip().replace(',', '-').splitlines()]
 
-    return sum(does_overlap(a, b, c, d) for (a, b,), (c, d) in data)
+    return sum(does_overlap(a, b, c, d) for a, b, c, d in data)
 
 
 def main():
