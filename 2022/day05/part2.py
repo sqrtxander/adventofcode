@@ -29,8 +29,9 @@ def solve(inp):
     for line in moves.splitlines():
         count, from_tower, to_tower = (int(num)
                                        for num in re.findall(r'\d+', line))
-        for i in reversed(range(count)):
-            towers[to_tower - 1].insert(0, towers[from_tower - 1].pop(i))
+
+        towers[to_tower - 1][:0] = towers[from_tower - 1][:count]
+        towers[from_tower - 1] = towers[from_tower - 1][count:]
 
     return ''.join(tower[0] for tower in towers)
 
