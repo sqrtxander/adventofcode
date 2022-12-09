@@ -46,7 +46,6 @@ def solve(inp):
     tail_visited = set()
     tail_visited.add((tailx, taily))
     for direc, dist in moves:
-        dist = int(dist)
         dx, dy = direcs[direc]
         for _ in range(dist):
             headx += dx

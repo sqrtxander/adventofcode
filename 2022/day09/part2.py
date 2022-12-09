@@ -45,7 +45,6 @@ def solve(inp):
     tail_visited.add((body[-1][0], body[-1][1]))
 
     for direc, dist in moves:
-        dist = int(dist)
         dx, dy = direcs[direc]
         for _ in range(dist):
             body[0][0] += dx
