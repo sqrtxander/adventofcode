@@ -159,7 +159,7 @@ noop
 '''
 
 
-def solve(inp):  # sourcery skip: assign-if-exp
+def solve(inp):
     data = inp.strip().splitlines()
 
     x = 1
